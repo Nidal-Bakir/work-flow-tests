@@ -1,3 +1,5 @@
+## v0.1.0+1
+- Improve the docs
 ## v0.1.0
 
 - `elapsedTime` now will return real-time duration rather than folding delays

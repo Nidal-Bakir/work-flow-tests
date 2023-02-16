@@ -1,8 +1,8 @@
-name: exponential_back_off
+name: exponendfasfdsfs
 description: Implementation of exponential backoff algorithm using pure dart
 version: 0.1.0
-homepage: https://github.com/Nidal-Bakir/exponential_back_off
-repository: https://github.com/Nidal-Bakir/exponential_back_off.git
+homepage: https://github.com/Nidal-Bakir/work-flow-tests
+repository: https://github.com/Nidal-Bakir/work-flow-tests.git
 
 dependencies:
   async: ^2.10.0

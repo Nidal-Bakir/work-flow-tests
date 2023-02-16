@@ -1,8 +1,7 @@
 import 'dart:math';
 
+import 'package:exponendfasfdsfs/exponential_back_off.dart';
 import 'package:test/test.dart';
-
-import 'package:exponential_back_off/exponential_back_off.dart';
 
 class TestException implements Exception {
   final dynamic message;

@@ -1,4 +1,4 @@
-
+[![setup](https://github.com/Nidal-Bakir/work-flow-tests/actions/workflows/setup_and_test.yml/badge.svg)](https://github.com/Nidal-Bakir/work-flow-tests/actions/workflows/setup_and_test.yml)
 ## Retry failing processes like HTTP requests using an exponential interval between each retry
 
 **Exponential backoff algorithm:**
