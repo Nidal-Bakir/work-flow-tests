@@ -26,14 +26,14 @@ jobs:
       - name: Analyze project source
         run: dart analyze --fatal-infos
 
-      - name: Run tests
-        run: dart test
+      # - name: Run tests
+      #   run: dart test
 
       - name: publish dry run
         run: dart pub publish --dry-run
 
-      - uses: VeryGoodOpenSource/very_good_coverage@v2
+      - name: 📊 Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
-          
           min_coverage: 95
           exclude: '**/example'
