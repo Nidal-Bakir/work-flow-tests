@@ -40,9 +40,6 @@ jobs:
       - name: Run tests
         run: flutter test --coverage --concurrency=4
 
-      - name: publish dry run
-        run: dart pub publish --dry-run
-
       - name: 📊 Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
