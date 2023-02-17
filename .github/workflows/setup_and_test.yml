@@ -42,3 +42,10 @@ jobs:
         with:
           min_coverage: 95
           exclude: '**/example **/either.dart'
+          
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.1
+
+
+ 
+          
