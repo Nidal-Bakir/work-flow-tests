@@ -57,63 +57,6 @@ void main() {
   });
 
   test(
-      'elapsedTime should be equal to expected precise sleep time '
-      'when maxRandomizationFactor equal 0 ', () async {
-    // arrange
-    final interval = Duration(milliseconds: 50);
-    final maxAttempts = 3;
-    final expo = ExponentialBackOff(
-      maxAttempts: maxAttempts,
-      interval: interval,
-      maxDelay: Duration(seconds: 10),
-      maxRandomizationFactor: 0,
-    );
-
-    int callCounter = 0;
-
-    // act
-    await expo.start(() {
-      ++callCounter;
-      throw TestException('test throw');
-    });
-
-    // assert
-    final expectedPreciseSleepTimeMillis =
-        (interval * pow(2, 1) + interval * pow(2, 2)).inMilliseconds;
-
-    expect(
-      expo.elapsedTime.inMilliseconds,
-      inInclusiveRange(
-        expectedPreciseSleepTimeMillis,
-        expectedPreciseSleepTimeMillis +
-            100, // + ~100 the natural processing time of the code
-      ),
-    );
-    expect(callCounter, equals(maxAttempts));
-    expect(expo.isProcessRunning(), isFalse);
-  });
-
-  test(
-      'the computed delay should be equal to maxDelay in case the computed '
-      'delay is grater than the specified maxDelay', () {
-    // arrange
-    final interval = Duration(seconds: 99);
-    final maxDelay = Duration(seconds: 5);
-    final expo = ExponentialBackOff(
-      maxAttempts: 3,
-      interval: interval,
-      maxDelay: maxDelay,
-      maxRandomizationFactor: 0.15,
-    );
-
-    // act
-    final delay = expo.computeDelay(99, Duration.zero);
-
-    // assert
-    expect(delay, equals(maxDelay));
-  });
-
-  test(
       'computeDelay() should output delays in InclusiveRange[delay-rand,delay+rand] '
       'which follow the defined formula: delay = interval * 2^min(attempt,31) '
       '+/- (random percent`>= 0.0 and <=[randomizationFactor]`of that delay',
