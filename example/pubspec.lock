@@ -17,7 +17,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.0"
-  exponential_back_off:
+  exponendfasfdsfs:
     dependency: "direct main"
     description:
       path: ".."
