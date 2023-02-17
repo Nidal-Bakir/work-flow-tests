@@ -1,0 +1,85 @@
+name: exponential_back_off
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Git checkout
+        uses: actions/checkout@v3
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter --version
+
+      - name: 📦 Install dependencies
+        run: dart pub get
+      - name: 📦 Install example dependencies
+        run: dart pub get --directory=./example
+
+  format:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: ✨ Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+  analyze:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🕵️ Analyze project source
+        run: dart analyze --fatal-infos
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧪 Run tests
+        run: flutter test --coverage --concurrency=4
+
+  publish_dry_run:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🎯 publish dry run
+        run: dart pub publish --dry-run
+
+  coverage:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📊 Check code coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v2
+        with:
+          min_coverage: 95
+          exclude: "**/example **/either.dart"
+
+  pana:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Install PANA
+        run: flutter pub global activate pana
+
+      - name: 📊 Verify PANA score
+        run: |
+          PANA=$(pana . --no-warning); PANA_SCORE=$(echo $PANA | sed -n "s/.*Points: \([0-9]*\)\/\([0-9]*\)./\1\/\2/p")
+          echo "Score: $PANA_SCORE"
+          IFS='/'; read -a SCORE_ARR <<< "$PANA_SCORE"; SCORE=SCORE_ARR[0];
+          if (( $SCORE < 120 )); then echo "The minimum score of 120 was not met!"; exit 1; fi
+
+  codecov:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📊 Codecov
+        uses: codecov/codecov-action@v3.1.1
