@@ -1,0 +1,50 @@
+name: setup and test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  codecov:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📊 Codecov
+        uses: codecov/codecov-action@v3.1.1
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: setup flutter & dart
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: true
+      - run: flutter --version
+
+      - name: Install dependencies
+        run: dart pub get
+      - name: Install example dependencies
+        run: dart pub get --directory=./example
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze project source
+        run: dart analyze --fatal-infos
+
+      - name: Run tests
+        run: flutter test --coverage --concurrency=4
+
+      - name: publish dry run
+        run: dart pub publish --dry-run
+
+      - name: 📊 Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v2
+        with:
+          min_coverage: 95
+          exclude: "**/example **/either.dart"
