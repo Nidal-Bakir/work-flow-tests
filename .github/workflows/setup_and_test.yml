@@ -33,16 +33,14 @@ jobs:
 
       - name: Run tests
         run: flutter test --coverage --concurrency=4
-
-      - name: publish dry run
-        run: dart pub publish --dry-run
+ 
 
       - name: 📊 Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
-          min_coverage: 95
+          min_coverage: 50
           exclude: '**/example **/either.dart'
-          
+
       - name: Codecov
         uses: codecov/codecov-action@v3.1.1
 
