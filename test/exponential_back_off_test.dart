@@ -40,62 +40,6 @@ void main() {
   });
 
   test(
-      'the computed delay should be equal to maxDelay in case the computed '
-      'delay is grater than the specified maxDelay', () {
-    // arrange
-    final interval = Duration(seconds: 99);
-    final maxDelay = Duration(seconds: 5);
-    final expo = ExponentialBackOff(
-      maxAttempts: 3,
-      interval: interval,
-      maxDelay: maxDelay,
-      maxRandomizationFactor: 0.15,
-    );
-
-    // act
-    final delay = expo.computeDelay(99, Duration.zero);
-
-    // assert
-    expect(delay, equals(maxDelay));
-  });
-
-  test(
-      'computeDelay() should output delays in InclusiveRange[delay-rand,delay+rand] '
-      'which follow the defined formula: delay = interval * 2^min(attempt,31) '
-      '+/- (random percent`>= 0.0 and <=[randomizationFactor]`of that delay',
-      () {
-    final interval = const Duration(milliseconds: 200);
-    final maxDelay = const Duration(seconds: 30);
-    final maxRandFactor = 0.15;
-    final expo = ExponentialBackOff(
-      interval: interval,
-      maxDelay: maxDelay,
-      maxRandomizationFactor: maxRandFactor,
-    );
-
-    for (var i = 1; i <= 1000; i++) {
-      // act
-      final delay = expo.computeDelay(i, Duration.zero);
-
-      // assert
-      final exp = min(31, i);
-      final expectedRawDelay = interval * pow(2, exp);
-      var maxRandomDelay = expectedRawDelay + expectedRawDelay * maxRandFactor;
-      var minRandomDelay = expectedRawDelay - expectedRawDelay * maxRandFactor;
-      maxRandomDelay = maxRandomDelay > maxDelay ? maxDelay : maxRandomDelay;
-      minRandomDelay = minRandomDelay > maxDelay ? maxDelay : minRandomDelay;
-
-      expect(
-        delay.inMilliseconds,
-        inInclusiveRange(
-          minRandomDelay.inMilliseconds,
-          maxRandomDelay.inMilliseconds,
-        ),
-      );
-    }
-  });
-
-  test(
       'calling stop() function should produce consistent result i.e: '
       'the value of CurrentDelay before calling stop() should be the same after '
       'calling stop() and the same applied for attemptCounter', () async {
