@@ -13,12 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: setup flutter & dart
-        uses: subosito/flutter-action@v2
+      - name: 🎯 Setup Dart
+        uses: dart-lang/setup-dart@v1.4
         with:
-          channel: "stable"
-          cache: true
-      - run: flutter --version
+          sdk: "stable"
+      - run: dart --version
 
       - name: Install dependencies
         run: dart pub get
@@ -32,7 +31,11 @@ jobs:
         run: dart analyze --fatal-infos
 
       - name: Run tests
-        run: flutter test --coverage --concurrency=4
+        run: |
+          dart pub global activate coverage
+          dart test --coverage=./coverage --concurrency=4 --test-randomize-ordering-seed random
+          dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage
+
       - name: 📊 Codecov
         uses: codecov/codecov-action@v3.1.1
 
