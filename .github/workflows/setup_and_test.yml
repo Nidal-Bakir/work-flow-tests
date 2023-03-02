@@ -18,4 +18,4 @@ jobs:
         uses: dart-lang/setup-dart@v1
       - name: publish dry run
         run: |
-          (cd packages/flutter && dart pub publish --dry-run 1> flutter_dry_run_stdout 2> flutter_dry_run_stderr)
+          (dart pub publish --dry-run 1> flutter_dry_run_stdout 2> flutter_dry_run_stderr)
