@@ -20,5 +20,6 @@ jobs:
         uses: dart-lang/setup-dart@v1
       - name: publish dry run
         run: |
-          touch ff.txt
-          (dart pub publish --dry-run 2>>ff.txt)
+          VAR_OUT=$(dart pub publish --dry-run 2>&1)
+          echo $VAR_OUT
+          
