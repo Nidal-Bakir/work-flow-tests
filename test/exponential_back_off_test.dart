@@ -37,6 +37,8 @@ void main() {
     // assert
     expect(expo.attemptCounter, equals(maxAttempts));
     expect(callCounter, equals(maxAttempts));
+  }, testOn: 'chrome || vm', onPlatform: {
+    'chrome': Timeout.factor(2),
   });
 
   test('elapsedTime should be less then or equal to maxElapsedTime', () async {

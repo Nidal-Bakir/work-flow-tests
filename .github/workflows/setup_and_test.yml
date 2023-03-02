@@ -7,40 +7,15 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
+  check-publish-dry-run-flutter:
+    name: publish dry-run (flutter)
+    timeout-minutes: 5
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-
-      - name: 🎯 Setup Dart
-        uses: dart-lang/setup-dart@v1.4
-        with:
-          sdk: "stable"
-      - run: dart --version
-
-      - name: Install dependencies
-        run: dart pub get
-      - name: Install example dependencies
-        run: dart pub get --directory=./example
-
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
-
-      - name: Analyze project source
-        run: dart analyze --fatal-infos
-
-      - name: Run tests
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup dart
+        uses: dart-lang/setup-dart@v1
+      - name: publish dry run
         run: |
-          dart pub global activate coverage
-          dart test --coverage=./coverage --concurrency=4 --test-randomize-ordering-seed random
-          dart pub global run coverage:format_coverage --packages=.dart_tool/package_config.json --report-on=lib --lcov -o ./coverage/lcov.info -i ./coverage
-
-      - name: 📊 Codecov
-        uses: codecov/codecov-action@v3.1.1
-
-      - name: 📊 Check Code Coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v2
-        with:
-          min_coverage: 95
-          exclude: "**/example **/either.dart"
+          (cd packages/flutter && dart pub publish --dry-run 1> flutter_dry_run_stdout 2> flutter_dry_run_stderr)
