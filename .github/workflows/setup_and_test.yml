@@ -11,6 +11,8 @@ jobs:
     name: publish dry-run (flutter)
     timeout-minutes: 5
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
