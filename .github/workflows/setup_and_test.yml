@@ -20,4 +20,5 @@ jobs:
         uses: dart-lang/setup-dart@v1
       - name: publish dry run
         run: |
-          (dart pub publish --dry-run 2> /dev/null)
+          touch ff.txt
+          (dart pub publish --dry-run 2>>ff.txt)
